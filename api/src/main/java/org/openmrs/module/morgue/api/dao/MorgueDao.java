@@ -110,10 +110,10 @@ public class MorgueDao {
 		sql.append("FROM patient p ");
 		sql.append("JOIN person pr ON p.patient_id = pr.person_id ");
 		sql.append("LEFT JOIN person_name pn ON pr.person_id = pn.person_id ");
-		sql.append("LEFT JOIN encounter e ON e.patient_id = p.patient_id");
-		sql.append("LEFT JOIN encounter_type et ON et.encounter_type_id = e.encounter_type");
-		sql.append("LEFT JOIN location l on l.location_id = e.location_id");
-		sql.append("WHERE pn.voided = 0 AND pr.voided = 0 AND et.encounter_type_id in (21, 31, 116)");
+		sql.append("LEFT JOIN encounter e ON e.patient_id = p.patient_id ");
+		sql.append("LEFT JOIN encounter_type et ON et.encounter_type_id = e.encounter_type ");
+		sql.append("LEFT JOIN location l on l.location_id = e.location_id ");
+		sql.append("WHERE pn.voided = 0 AND pr.voided = 0 AND et.encounter_type_id in (21, 31, 116) ");
 
 		// Add filters
 		if (dead != null && !dead.isEmpty()) {
