@@ -75,12 +75,13 @@ public class MorgueDao {
 	 * @param uuid
 	 * @param createdOnOrAfterDate
 	 * @param createdOnOrBeforeDate
+	 * @param locationUuid
 	 * @return
 	 */
 	public List<Object[]> getPatients(String dead, String name, String uuid, Date createdOnOrAfterDate,
-			Date createdOnOrBeforeDate) {
+			Date createdOnOrBeforeDate, String locationUuid) {
 		System.err.println("Morgue Searching for patients using: " + uuid + " : " + name + " : " + dead + " : "
-				+ createdOnOrAfterDate + " : " + createdOnOrBeforeDate + " : ");
+				+ createdOnOrAfterDate + " : " + createdOnOrBeforeDate + " : " + locationUuid + " : ");
 
 		Session session = this.sessionFactory.getCurrentSession();
 
@@ -109,7 +110,10 @@ public class MorgueDao {
 		sql.append("FROM patient p ");
 		sql.append("JOIN person pr ON p.patient_id = pr.person_id ");
 		sql.append("LEFT JOIN person_name pn ON pr.person_id = pn.person_id ");
-		sql.append("WHERE pn.voided = 0 AND pr.voided = 0 ");
+		sql.append("LEFT JOIN encounter e ON e.patient_id = p.patient_id");
+		sql.append("LEFT JOIN encounter_type et ON et.encounter_type_id = e.encounter_type");
+		sql.append("LEFT JOIN location l on l.location_id = e.location_id");
+		sql.append("WHERE pn.voided = 0 AND pr.voided = 0 AND et.encounter_type_id in (21, 31, 116)");
 
 		// Add filters
 		if (dead != null && !dead.isEmpty()) {
@@ -134,6 +138,10 @@ public class MorgueDao {
 
 		if (createdOnOrBeforeDate != null) {
 			sql.append("AND p.date_created <= :createdBefore ");
+		}
+
+		if (locationUuid != null && !locationUuid.isEmpty()) {
+			sql.append("AND l.uuid = :locationUuid ");
 		}
 
 		sql.append("ORDER BY p.patient_id");
