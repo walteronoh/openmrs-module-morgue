@@ -146,7 +146,7 @@ public class MorgueDao {
 
 		sql.append("ORDER BY p.patient_id");
 
-		System.out.println("Generated SQL Query: " + sql.toString());
+		// System.out.println("Generated SQL Query: " + sql.toString());
 
 		// Create native query
 		org.hibernate.query.NativeQuery query = session.createNativeQuery(sql.toString());

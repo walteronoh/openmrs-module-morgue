@@ -107,7 +107,7 @@ public class MorguePatientResource extends DelegatingCrudResource<CombinedPatien
 		int total = result.size();
 		int toIndex = Math.min(start + limit, total);
 		List<Object[]> paginatedList = result.subList(Math.min(start, total), toIndex);
-		System.out.println("Start index is: " + start + " : And Limit is: " + limit + " : Total is: " + total + " : To index is: " + toIndex);
+		//System.out.println("Start index is: " + start + " : And Limit is: " + limit + " : Total is: " + total + " : To index is: " + toIndex);
 		
 		List<CombinedPatientDetails> combinedDetailsList = new ArrayList<>();
 		for (Object[] ob : paginatedList) {
@@ -119,8 +119,8 @@ public class MorguePatientResource extends DelegatingCrudResource<CombinedPatien
 			String middleName = (String) ob[5];
 			String familyName = (String) ob[6];
 			Boolean preferred = (Boolean) ob[7];
-			System.out.println("Result Got: " + patient.getId() + " : " + person.getId() + " : " + personName.getId() + " : " + personNameId + " : "
-			        + givenName + " : " + middleName + " : " + familyName + " : " + preferred);
+			// System.out.println("Result Got: " + patient.getId() + " : " + person.getId() + " : " + personName.getId() + " : " + personNameId + " : "
+			//         + givenName + " : " + middleName + " : " + familyName + " : " + preferred);
 			CombinedPatientDetails combinedPatientDetails = new CombinedPatientDetails(patient, person, personName);
 			combinedDetailsList.add(combinedPatientDetails);
 		}
@@ -128,7 +128,7 @@ public class MorguePatientResource extends DelegatingCrudResource<CombinedPatien
 		long totalList = total;
 		// Determine if there are more results
 		boolean hasMoreResults = start + limit < total;
-		System.out.println("Has more results is: " + hasMoreResults);
+		// System.out.println("Has more results is: " + hasMoreResults);
 		return new AlreadyPaged<CombinedPatientDetails>(context, combinedDetailsList, hasMoreResults, totalList);
 	}
 	
