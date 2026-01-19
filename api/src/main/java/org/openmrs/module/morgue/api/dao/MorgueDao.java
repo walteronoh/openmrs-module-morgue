@@ -110,10 +110,7 @@ public class MorgueDao {
 		sql.append("FROM patient p ");
 		sql.append("JOIN person pr ON p.patient_id = pr.person_id ");
 		sql.append("LEFT JOIN person_name pn ON pr.person_id = pn.person_id ");
-		sql.append("LEFT JOIN encounter e ON e.patient_id = p.patient_id ");
-		sql.append("LEFT JOIN encounter_type et ON et.encounter_type_id = e.encounter_type ");
-		sql.append("LEFT JOIN location l on l.location_id = e.location_id ");
-		sql.append("WHERE pn.voided = 0 AND pr.voided = 0 AND et.encounter_type_id in (21, 31, 116) ");
+		sql.append("WHERE pn.voided = 0 AND pr.voided = 0 ");
 
 		// Add filters
 		if (dead != null && !dead.isEmpty()) {
@@ -141,7 +138,11 @@ public class MorgueDao {
 		}
 
 		if (locationUuid != null && !locationUuid.isEmpty()) {
-			sql.append("AND l.uuid = :locationUuid ");
+			sql.append("AND EXISTS (SELECT 1 FROM encounter e JOIN encounter_type et ON et.encounter_type_id = e.encounter_type ");
+        	sql.append("LEFT JOIN location l ON l.location_id = e.location_id ");
+        	sql.append("LEFT JOIN obs o ON o.encounter_id = e.encounter_id ");
+        	sql.append("WHERE e.patient_id = p.patient_id AND et.encounter_type_id IN (319, 167) AND o.concept_id = 9082 AND o.value_coded = 159 ");
+			sql.append("AND l.uuid = :locationUuid) ");
 		}
 
 		sql.append("ORDER BY p.patient_id");
